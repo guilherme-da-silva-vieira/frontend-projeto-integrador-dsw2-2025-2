@@ -8,6 +8,7 @@ import Contato from "./pages/Contato.jsx";
 
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap/dist/js/bootstrap.min.js"
+import "bootstrap-icons/font/bootstrap-icons.min.css"
 import MensagensIndex from "./pages/mensagens/MensagensIndex.jsx";
 import MensagensCreate from "./pages/mensagens/MensagensCreate.jsx";
 import MensagensEdit from "./pages/mensagens/MensagensEdit.jsx";
