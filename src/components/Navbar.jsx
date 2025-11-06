@@ -1,10 +1,11 @@
 import React from 'react'
 import { Link, NavLink } from 'react-router-dom'
+import ThemeButton from './ThemeButton'
 
 const Navbar = () => {
     return (
         <>
-            <nav className="navbar navbar-expand-lg bg-primary">
+            <nav className="navbar navbar-expand-lg bg-info">
                 <div className="container-fluid">
                     <Link className='navbar-brand' to="/"><span className='bi bi-chat-right-text-fill'></span> Principal</Link>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,6 +20,7 @@ const Navbar = () => {
                                 <NavLink className="nav-link" to="/contato">Contato</NavLink>
                             </li>
                         </ul>
+                        <ThemeButton/>
                     </div>
                 </div>
             </nav>

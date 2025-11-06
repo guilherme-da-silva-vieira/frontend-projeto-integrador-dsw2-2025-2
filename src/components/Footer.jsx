@@ -10,7 +10,7 @@ const Footer = () => {
     const year = MostraAno();
     return (
         <>
-            <div className='text-center bg-primary p-4'>
+            <div className='text-center bg-info p-4'>
                 <footer>
                     <p className='fs-1'>&copy; {year} Guilherme da Silva Vieira, todos os direitos reservados.</p>
                 </footer>
