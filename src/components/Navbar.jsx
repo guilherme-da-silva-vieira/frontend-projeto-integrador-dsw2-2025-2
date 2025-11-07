@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import ThemeButton from './ThemeButton'
+import Dropdown from './Dropdown'
 
 const Navbar = () => {
     return (
@@ -19,6 +20,7 @@ const Navbar = () => {
                             <li className="nav-item">
                                 <NavLink className="nav-link" to="/contato">Contato</NavLink>
                             </li>
+                            <Dropdown/>
                         </ul>
                         <ThemeButton/>
                     </div>

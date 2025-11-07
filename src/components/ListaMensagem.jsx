@@ -46,7 +46,7 @@ const ListaMensagem = () => {
             </div>
             <div className='my-5'>
                 <ul className='list-group'>
-                    {mensagens.map(mensagem => <Link to="/mensagens/show" className='link-underline link-underline-opacity-0'><li key={mensagem.id} className='list-group-item'> <Mensagem mensagem={mensagem} /></li></Link>)}
+                    {mensagens.map(mensagem => <Link to="/mensagens/show" className='link-underline link-underline-opacity-0'><li className='list-group-item'> <Mensagem mensagem={mensagem} /></li></Link>)}
                 </ul>
             </div>
             <div className='row'>
