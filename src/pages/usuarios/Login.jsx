@@ -1,6 +1,7 @@
 import React from 'react'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
+import { Link } from 'react-router-dom'
 
 const Login = () => {
     return (
@@ -21,6 +22,9 @@ const Login = () => {
                 </form>
             </div>
             <div className="position-absolute bottom-0 start-0 end-0"><Footer/></div>
+            <div className="text-center">
+                <p className="fs-1 mt-5">Novo por aqui? <Link className="text-primary" to="/usuarios/register">Cadastrar aqui!</Link></p>
+            </div>
         </>
     )
 }
