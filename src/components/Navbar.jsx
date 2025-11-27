@@ -2,6 +2,7 @@ import React from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import ThemeButton from './ThemeButton'
 import Dropdown from './Dropdown'
+import DropdownUsuarios from './DropdownUsuarios'
 
 const Navbar = () => {
     return (
@@ -20,6 +21,7 @@ const Navbar = () => {
                             <li className="nav-item">
                                 <NavLink className="nav-link" to="/contato">Contato</NavLink>
                             </li>
+                            <DropdownUsuarios/>
                             <Dropdown/>
                         </ul>
                         <ThemeButton/>

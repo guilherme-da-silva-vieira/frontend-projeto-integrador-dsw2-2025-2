@@ -13,6 +13,8 @@ import MensagensIndex from "./pages/mensagens/MensagensIndex.jsx";
 import MensagensCreate from "./pages/mensagens/MensagensCreate.jsx";
 import MensagensEdit from "./pages/mensagens/MensagensEdit.jsx";
 import MensagensShow from "./pages/mensagens/MensagensShow.jsx";
+import Login from "./pages/usuarios/Login.jsx";
+import Register from "./pages/usuarios/Register.jsx";
 
 const router = createBrowserRouter([
     { path: "/", element: <App /> },
@@ -22,6 +24,8 @@ const router = createBrowserRouter([
     { path: "/mensagens/create", element: <MensagensCreate/>},
     { path: "/mensagens/edit", element: <MensagensEdit/>},
     { path: "/mensagens/show", element: <MensagensShow/>},
+    { path: "/usuarios/login", element: <Login/>},
+    { path: "/usuarios/register", element: <Register/>}
 ]);
 
 createRoot(document.getElementById("root")).render(
