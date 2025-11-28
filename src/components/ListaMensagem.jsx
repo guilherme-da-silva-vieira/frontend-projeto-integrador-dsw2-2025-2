@@ -53,20 +53,20 @@ const ListaMensagem = () => {
                 {mensagens.map(mensagem =>
                     <div className='col-lg-6 col-12'>
                         <div className="card text-center my-1" key={mensagem.id}>
-                        <div className="card-header">
-                            {mensagem.Usuarios_id}
+                            <div className="card-header">
+                                {mensagem.Usuarios_id}
+                            </div>
+                            <div className="card-body">
+                                <h5 className="card-title">{mensagem.id}</h5>
+                                <p className="card-text">{mensagem.mensagem}</p>
+                                <button className='btn btn-secondary'>Ativo</button>
+                                <button className='btn btn-info'>Editar</button>
+                                <button className='btn btn-danger'>Excluir</button>
+                            </div>
+                            <div className="card-footer text-body-secondary">
+                                {mensagem.Usuarios_id_destinatario}
+                            </div>
                         </div>
-                        <div className="card-body">
-                            <h5 className="card-title">{mensagem.id}</h5>
-                            <p className="card-text">{mensagem.mensagem}</p>
-                            <button className='btn btn-secondary'>Ativo</button>
-                            <button className='btn btn-info'>Editar</button>
-                            <button className='btn btn-danger'>Excluir</button>
-                        </div>
-                        <div className="card-footer text-body-secondary">
-                            {mensagem.Usuarios_id_destinatario}
-                        </div>
-                    </div>
                     </div>
                 )}
             </div>
