@@ -11,6 +11,7 @@ const DropdownUsuarios = () => {
                 <ul className="dropdown-menu">
                     <li><Link className="dropdown-item" to="/usuarios/login">Entrar</Link></li>
                     <li><Link className="dropdown-item" to="/usuarios/register">Cadastrar</Link></li>
+                    <li><Link className='dropdown-item' to="/usuarios/profile">Perfil</Link></li>
                 </ul>
             </li>
         </>
