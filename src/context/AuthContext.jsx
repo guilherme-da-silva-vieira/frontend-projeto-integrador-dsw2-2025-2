@@ -1,58 +1,50 @@
-import { useState, useEffect } from "react";
-import { AuthContext } from "./Context";
-import api from "../services/api";
+import { useContex, createContext, useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-
-  const logout = async () => {
-    try {
-      await api.post("/usuarios/logout");
-    } catch (error) {
-      console.error("Erro no logout back-end", error);
-    } finally {
-      localStorage.removeItem("token");
-      setUser(null);
-    }
-  };
-
-  useEffect(() => {
-    const checkSession = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-
-      try {
-        const { data } = await api.post("/usuarios/refresh");
-        localStorage.setItem("token", data.access_token);
-        
-        // Decodifica o payload do JWT
-        const payload = JSON.parse(atob(data.access_token.split('.')[1]));
-        setUser({ id: payload.sub, nome: payload.nome, papel: payload.papel });
-        
-      } catch (error) {
-        console.error("Sessão inválida ou expirada:", error);
-        logout();
+const AuthProvider = ({children}) =>{
+  const [id, setId] = useState(0);
+  const [access_token,setAToken] = useState("");
+  const redirect = useNavigate();
+  const loginAction = async (data) => {
+    try{
+      const response = await fetch("http://localhost:3000/api/usuarios/login",{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const res = await response.json();
+      const {erro} = res;
+      if(erro == "email e senha são obrigatórios" || erro == "credenciais inválidas"){
+        Alert("campoalert","danger","Crendenciais inválidas, tente novamente!");
+        return;
       }
-    };
-    checkSession();
-  }, []);
+      else{
+        setId(id);
+        setAToken(res.access_token);
+        localStorage.setItem("access_token",res.access_token);
+        redirect("/mensagens");
+        return;
+      }
+      throw new Error(res.erro);
+    }
+    catch(erro){
+      console.log(erro);
+    }
+  }
+  const logOut = () =>{
+    setId(0);
+    setAToken("");
+    localStorage.removeItem("access_token");
+    navigate("/usuarios/login")
+  }
+  return <AuthContext.Provider value={{access_token, id, loginAction, logOut}}>{children}</AuthContext.Provider>
+}
 
-  const login = async (email, senha) => {
-    const { data } = await api.post("/usuarios/login", { email, senha });
-    localStorage.setItem("token", data.access_token);
-    setUser(data.user);
-  };
+export default AuthProvider
 
-const register = async (nome, email, senha, papel) => {
-    const { data } = await api.post("/usuarios/register", { nome, email, senha, papel });
-    
-    localStorage.setItem("token", data.access_token);
-    setUser(data.user);
-};
-
-  return (
-    <AuthContext.Provider value={{ user, setUser, login, register, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+export const useAuth = () => {
+  return useContext(AuthContext);
 };

@@ -1,20 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Mensagem from './Mensagem';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const ListaMensagem = () => {
-    const [mensagens, setMensagens] = React.useState([]);
+    const [mensagens, setMensagens] = useState([]);
+    const auth = useAuth();
     // habilitando o useEffect para apis(não funcionando de maneira imediata, somente depois da primeira pintura)
-    React.useEffect(() => {
+    useEffect(() => {
         // função async pois precisará do await
         const fetchMensagens = async () => {
-            const response = await fetch("http://localhost:3000/api/mensagens");
+            const response = await fetch("http://localhost:3000/api/mensagens", {
+                headers: {
+                    "Authorization":`Bearer ${auth.access_token}`},
+            });
             const data = await response.json(); // conversão dos dados para json
             // console.log(data);
             setMensagens(data);//redesenhando o render
         }
         fetchMensagens();
-    }, []);// o colchete vazio irá apresentar que será executado depois do primeiro render
+    });// o colchete vazio irá apresentar que será executado depois do primeiro render
 
     return (
         <>

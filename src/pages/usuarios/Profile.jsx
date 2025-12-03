@@ -15,7 +15,7 @@ const Profile = () => {
             setUsuarios(data);
         }
         fetchUsuarios();
-    }, []);
+    });
     return (
         <>
             < Navbar />
