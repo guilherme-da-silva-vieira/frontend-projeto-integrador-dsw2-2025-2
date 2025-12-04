@@ -1,76 +1,86 @@
-import React from 'react';
-import Mensagem from './Mensagem';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const ListaMensagem = () => {
-    const [mensagens, setMensagens] = React.useState([]);
-    // habilitando o useEffect para apis(não funcionando de maneira imediata, somente depois da primeira pintura)
-    React.useEffect(() => {
-        // função async pois precisará do await
+    const [mensagens, setMensagens] = useState([]);
+    const [erro, setErro] = useState(null);
+    const token = localStorage.getItem("token");
+    // Função para deletar
+    const handleDelete = async (id) => {
+        if (!confirm("Tem certeza que deseja excluir?")) return;
+        
+        const token = localStorage.getItem("token"); // Assumindo que guardou o token aqui
+        
+        try {
+            const response = await fetch(`http://localhost:3000/api/mensagens/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            if (response.ok) {
+                // Remove da tela sem recarregar a página
+                setMensagens(mensagens.filter(m => m.id !== id));
+            } else {
+                alert("Erro ao excluir. Verifique se você tem permissão.");
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Erro de conexão.");
+        }
+    };
+
+    // Função para carregar mensagens
+    useEffect(() => {
         const fetchMensagens = async () => {
-            const response = await fetch("http://localhost:3000/api/mensagens");
-            const data = await response.json(); // conversão dos dados para json
-            // console.log(data);
-            setMensagens(data);//redesenhando o render
+            const token = localStorage.getItem("token");
+            try {
+                const response = await fetch("http://localhost:3000/api/mensagens", {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+                if(!response.ok) throw new Error("Erro ao buscar dados");
+                const data = await response.json();
+                setMensagens(data);
+            } catch (err) {
+                setErro(err.message);
+            }
         }
         fetchMensagens();
-    }, []);// o colchete vazio irá apresentar que será executado depois do primeiro render
+    }, []);
+
+    if (erro) return <div className="alert alert-danger">{erro}</div>;
 
     return (
-        <>
-            <div className="list-group">
-                <a href="#" className="list-group-item list-group-item-action" aria-current="true">
-                    <div className="d-flex w-100 justify-content-between">
-                        <h5 className="mb-1">List group item heading</h5>
-                        <small>3 days ago</small>
-                    </div>
-                    <p className="mb-1">Some placeholder content in a paragraph.</p>
-                    <small>And some small print.</small>
-                </a>
-                <a href="#" className="list-group-item list-group-item-action">
-                    <div className="d-flex w-100 justify-content-between">
-                        <h5 className="mb-1">List group item heading</h5>
-                        <small className="text-body-secondary">3 days ago</small>
-                    </div>
-                    <p className="mb-1">Some placeholder content in a paragraph.</p>
-                    <small className="text-body-secondary">And some muted small print.</small>
-                </a>
-                <a href="#" className="list-group-item list-group-item-action">
-                    <div className="d-flex w-100 justify-content-between">
-                        <h5 className="mb-1">List group item heading</h5>
-                        <small className="text-body-secondary">3 days ago</small>
-                    </div>
-                    <p className="mb-1">Some placeholder content in a paragraph.</p>
-                    <small className="text-body-secondary">And some muted small print.</small>
-                </a>
-            </div>
-            <div className='my-5'>
-                <ul className='list-group'>
-                    {mensagens.map(mensagem => <Link to="/mensagens/show" className='link-underline link-underline-opacity-0'><li className='list-group-item'> <Mensagem mensagem={mensagem} /></li></Link>)}
-                </ul>
-            </div>
-            <div className='row'>
-                {mensagens.map(mensagem =>
-                    <div className='col-lg-6 col-12'>
-                        <div className="card text-center my-1" key={mensagem.id}>
-                            <div className="card-header">
-                                {mensagem.Usuarios_id}
-                            </div>
-                            <div className="card-body">
-                                <h5 className="card-title">{mensagem.id}</h5>
-                                <p className="card-text">{mensagem.mensagem}</p>
-                                <button className='btn btn-secondary'>Ativo</button>
-                                <button className='btn btn-info'>Editar</button>
-                                <button className='btn btn-danger'>Excluir</button>
-                            </div>
-                            <div className="card-footer text-body-secondary">
-                                {mensagem.Usuarios_id_destinatario}
+        <div className='row'>
+            {mensagens.map(mensagem =>
+                <div className='col-lg-6 col-12 my-2' key={mensagem.id}>
+                    <div className="card text-center h-100">
+                        <div className="card-header d-flex justify-content-between">
+                            <span>De: {mensagem.Usuarios_id}</span>
+                            <span>Para: {mensagem.Usuarios_id_destinatario}</span>
+                        </div>
+                        <div className="card-body">
+                            <h5 className="card-title">ID: {mensagem.id}</h5>
+                            <p className="card-text text-start p-2 bg-light rounded">{mensagem.mensagem}</p>
+                            <div className="d-flex justify-content-center gap-2 mt-3">
+                                <Link to={`/mensagens/edit/${mensagem.id}`} className='btn btn-primary'>
+                                    <i className="bi bi-pencil"></i> Editar
+                                </Link>
+                                <button onClick={() => handleDelete(mensagem.id)} className='btn btn-danger'>
+                                    <i className="bi bi-trash"></i> Excluir
+                                </button>
                             </div>
                         </div>
+                        <div className="card-footer text-body-secondary">
+                           Enviado em: {new Date(mensagem.data_criacao || Date.now()).toLocaleDateString()}
+                        </div>
                     </div>
-                )}
-            </div>
-        </>
+                </div>
+            )}
+        </div>
     )
 }
 

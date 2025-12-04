@@ -1,29 +1,82 @@
-import React from 'react'
-import Navbar from '../../components/Navbar'
-import Footer from '../../components/Footer'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Login = () => {
+    const [email, setEmail] = useState("");
+    const [senha, setSenha] = useState("");
+    const navigate = useNavigate();
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch("http://localhost:3000/api/usuarios/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email, senha })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                alert(data.erro || "Erro ao fazer login");
+                return;
+            }
+
+            // Salva token e usuário no localStorage
+            localStorage.setItem("token", data.access_token);
+            localStorage.setItem("user", JSON.stringify(data.user));
+
+            alert("Login realizado com sucesso!");
+
+            // Redireciona baseado no papel (0 = Admin, 1 = Usuário)
+            if (data.user.papel === 0) {
+                navigate("/dashboard/admin");
+            } else {
+                navigate("/dashboard/user");
+            }
+
+        } catch (error) {
+            console.error("Erro:", error);
+            alert("Erro de conexão com o servidor.");
+        }
+    };
+
     return (
         <>
-            <Navbar />
-            <h1 className='text-center'>Entrar</h1>
-            <div className='w-75 m-auto mt-2'>
-                <form>
-                    <div className='form-floating mb-3 border border-secondary rounded'>
-                        <input type="email" className='form-control' name="email" id="email" placeholder='name@example.com'/>
+            <h1>Entrar</h1>
+            <div>
+                <form onSubmit={handleLogin}>
+                    <div>
+                        <input 
+                            type="email" 
+                            name="email" 
+                            id="email" 
+                            placeholder='name@example.com'
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
                         <label htmlFor="email">Email</label>
                     </div>
-                    <div className='form-floating mb-3 border border-secondary rounded'>
-                        <input type="password" name="senha" id="senha" className='form-control' placeholder='Password'/>
+                    <div>
+                        <input 
+                            type="password" 
+                            name="senha" 
+                            id="senha" 
+                            placeholder='Password'
+                            value={senha}
+                            onChange={(e) => setSenha(e.target.value)}
+                            required
+                        />
                         <label htmlFor="senha">Senha</label>
                     </div>
-                        <button type="submit" className='btn btn-lg btn-success w-100'>Entrar</button>
+                    <button type="submit">Entrar</button>
                 </form>
             </div>
-            <div className="position-absolute bottom-0 start-0 end-0"><Footer/></div>
-            <div className="text-center">
-                <p className="fs-1 mt-5">Novo por aqui? <Link className="text-primary" to="/usuarios/register">Cadastrar aqui!</Link></p>
+            <div>
+                <p>Novo por aqui? <Link to="/usuarios/register">Cadastrar aqui!</Link></p>
             </div>
         </>
     )

@@ -4,55 +4,110 @@ import Footer from '../../components/Footer'
 import { useNavigate } from 'react-router-dom';
 
 const MensagensCreate = () => {
-  const [Usuarios_id, setUsuarios_Id] = useState(1);
-  const [Usuarios_id_destinatario, setUsuarios_id_destinatario] = useState(1);
+  // Inicializando estados
+  const [Usuarios_id, setUsuarios_Id] = useState("");
+  const [Usuarios_id_destinatario, setUsuarios_id_destinatario] = useState("");
   const [mensagem, setMensagem] = useState("");
+  const [erro, setErro] = useState("");
+  
   const navigate = useNavigate();
+
   const enviaFormulario = async (e) => {
     e.preventDefault();
+    setErro("");
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+        setErro("Você precisa estar logado para enviar mensagens.");
+        return;
+    }
+
     const dadosEnviados = {
-      Usuarios_id,
-      Usuarios_id_destinatario,
+      Usuarios_id: Number(Usuarios_id),
+      Usuarios_id_destinatario: Number(Usuarios_id_destinatario),
       mensagem
     };
-    const dadosJSON = JSON.stringify(dadosEnviados);
-    console.log(dadosJSON);
+
     try {
       const requisicao = await fetch("http://localhost:3000/api/mensagens/", {
         method: "POST",
-        body: dadosJSON,
+        body: JSON.stringify(dadosEnviados),
         headers:{
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
       });
-      console.log(requisicao);
-      // não foi uma requisição bem sucedida
-      if(!requisicao.ok)throw new Error("Não foi possível salvar");
+
+      if(!requisicao.ok) {
+        const errorData = await requisicao.json();
+        throw new Error(errorData.erro || "Não foi possível salvar");
+      }
+      
+      alert("Mensagem enviada com sucesso!");
       navigate("/mensagens");      
     } catch (error) {
       console.log(error);
+      setErro(error.message);
     }
-
   }
+
    return (
     <>
       <Navbar />
-      <form onSubmit={enviaFormulario}>
-        <div className='m-3 border border-secondary rounded p-2'>
-          <p className='fs-1 text-center'>Enviar nova mensagem</p>
-          <label className='form-label fs-3' htmlFor="Usuarios_id">Usuário:</label>
-          <input className='form-control' type="number" name="Usuarios_id" id="Usuarios_id" value={Number(Usuarios_id)} min="1" onChange={(e) => setUsuarios_Id(e.target.value)} required/>
-          <br />
-          <label className='form-label fs-3' htmlFor="Usuarios_id_destinatario">Destinatário:</label>
-          <input className='form-control' type="number" name="Usuarios_id_destinatario" id="Usuarios_id_destinatario" min="1" value={Usuarios_id_destinatario} onChange={(e) => setUsuarios_id_destinatario(Number(e.target.value))} required/>
-          <div className='mb-3'>
-            <label htmlFor="mensagem" className='form-label fs-3'>Digite sua mensagem:</label>
-            <textarea name="mensagem" id="mensagem" className='form-control' rows="5" value={mensagem} onChange={(e) => setMensagem(e.target.value)} required></textarea>
-          </div>
-          <button type='submit' className='btn btn-lg btn-success'>Enviar Mensagem</button>
-        </div>
-      </form>
-      <Footer />
+      <div className="container mt-4">
+        <form onSubmit={enviaFormulario}>
+            <div className='card border-secondary p-4'>
+            <h2 className='text-center mb-4'>Nova Mensagem</h2>
+            
+            {erro && <div className="alert alert-danger">{erro}</div>}
+
+            <div className="mb-3">
+                <label className='form-label' htmlFor="Usuarios_id">ID do Remetente (Você):</label>
+                <input 
+                    className='form-control' 
+                    type="number" 
+                    id="Usuarios_id" 
+                    value={Usuarios_id} 
+                    onChange={(e) => setUsuarios_Id(e.target.value)} 
+                    required
+                    placeholder="Ex: 2"
+                />
+            </div>
+
+            <div className="mb-3">
+                <label className='form-label' htmlFor="Usuarios_id_destinatario">ID do Destinatário:</label>
+                <input 
+                    className='form-control' 
+                    type="number" 
+                    id="Usuarios_id_destinatario" 
+                    value={Usuarios_id_destinatario} 
+                    onChange={(e) => setUsuarios_id_destinatario(e.target.value)} 
+                    required
+                    placeholder="Ex: 3"
+                />
+            </div>
+
+            <div className='mb-3'>
+                <label htmlFor="mensagem" className='form-label'>Mensagem:</label>
+                <textarea 
+                    id="mensagem" 
+                    className='form-control' 
+                    rows="4" 
+                    value={mensagem} 
+                    onChange={(e) => setMensagem(e.target.value)} 
+                    required
+                ></textarea>
+            </div>
+            
+            <button type='submit' className='btn btn-success w-100 btn-lg'>
+                <i className="bi bi-send-fill"></i> Enviar Mensagem
+            </button>
+            </div>
+        </form>
+      </div>
+      <div className="mt-5">
+        <Footer />
+      </div>
     </>
   )
 }

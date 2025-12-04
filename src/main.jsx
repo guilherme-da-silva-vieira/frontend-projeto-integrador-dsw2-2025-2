@@ -1,4 +1,3 @@
-// src/main.jsx
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -16,6 +15,8 @@ import MensagensShow from "./pages/mensagens/MensagensShow.jsx";
 import Login from "./pages/usuarios/Login.jsx";
 import Register from "./pages/usuarios/Register.jsx";
 import Profile from "./pages/usuarios/Profile.jsx";
+import DashboardAdmin from "./pages/dashboards/DashboardAdmin.jsx";
+import DashboardUser from "./pages/dashboards/DashboardUser.jsx";
 
 const router = createBrowserRouter([
     { path: "/", element: <App /> },
@@ -23,11 +24,13 @@ const router = createBrowserRouter([
     { path: "/contato", element: <Contato /> },
     { path: "/mensagens", element: <MensagensIndex/> },
     { path: "/mensagens/create", element: <MensagensCreate/>},
-    { path: "/mensagens/edit", element: <MensagensEdit/>},
-    { path: "/mensagens/show", element: <MensagensShow/>},
+    { path: "/mensagens/edit/:id", element: <MensagensEdit/>},
+    { path: "/mensagens/show/:id", element: <MensagensShow/>},
     { path: "/usuarios/login", element: <Login/>},
     { path: "/usuarios/register", element: <Register/>},
-    { path: "/usuarios/profile", element: <Profile/>}
+    { path: "/usuarios/profile", element: <Profile/>},
+    { path: "/dashboard/admin", element: <DashboardAdmin/>},
+    { path: "/dashboard/user", element: <DashboardUser/>},
 ]);
 
 createRoot(document.getElementById("root")).render(
