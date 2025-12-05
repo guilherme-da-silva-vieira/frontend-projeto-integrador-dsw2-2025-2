@@ -11,7 +11,6 @@ const Dropdown = () => {
                 <ul className="dropdown-menu">
                     <li><Link className="dropdown-item" to="/mensagens/">Visualizar</Link></li>
                     <li><Link className="dropdown-item" to="/mensagens/create">Criar</Link></li>
-                    <li><Link className="dropdown-item" to="/mensagens/edit">Editar</Link></li>
                 </ul>
             </li>
         </>

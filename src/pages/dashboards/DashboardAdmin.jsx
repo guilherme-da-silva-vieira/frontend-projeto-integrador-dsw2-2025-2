@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Expirar from '../../services/Expirar';
+import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
 
 const DashboardAdmin = () => {
     const navigate = useNavigate();
@@ -14,7 +17,7 @@ const DashboardAdmin = () => {
             return;
         }
         const parsedUser = JSON.parse(storedUser);
-        
+
         // Verificação de papel (0 = Admin)
         if (parsedUser.papel !== 0) {
             alert("Acesso negado. Esta área é restrita para Administradores.");
@@ -40,7 +43,7 @@ const DashboardAdmin = () => {
                 // A rota GET /api/usuarios é pública no backend atual, mas aqui consumimos como exemplo de dado admin
                 const response = await fetch("http://localhost:3000/api/mensagens", {
                     headers: {
-                        "Authorization":`Bearer ${token}`,
+                        "Authorization": `Bearer ${token}`,
                     }
                 });
                 const data = await response.json();
@@ -57,19 +60,21 @@ const DashboardAdmin = () => {
 
     return (
         <>
-            <div>
-                <div>
+            <Expirar />
+            <Navbar />
+            <div className='m-auto'>
+                <div className='text-center'>
                     <div>
                         <h1>Painel do Administrador</h1>
                         <p>Bem-vindo, {user.nome} (ID: {user.id}).</p>
                         <p>Você tem acesso total ao gerenciamento do sistema.</p>
-                        <button onClick={() => navigate("/usuarios/profile")}>Meu Perfil</button>
+                        <button className='btn btn-lg btn-success' onClick={() => navigate("/usuarios/profile")}>Meu Perfil</button>
                     </div>
                 </div>
 
-                <h2>Gestão de Usuários</h2>
-                <div>
-                    <table>
+                <h2 className='text-center'>Gestão de Usuários</h2>
+                <div className='text-center'>
+                    <table className='m-auto'>
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -92,33 +97,36 @@ const DashboardAdmin = () => {
                     </table>
                 </div>
             </div>
-            <h2>Gestão de mensagens</h2>
-                <div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Usuarios_id</th>
-                                <th>Usuarios_id_destinatario</th>
-                                <th>Mensagem</th>
+            <h2 className='text-center'>Gestão de mensagens</h2>
+            <div>
+                <table className='m-auto'>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Usuarios_id</th>
+                            <th>Usuarios_id_destinatario</th>
+                            <th>Mensagem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {ListaMensagens.map((u) => (
+                            <tr key={u.id}>
+                                <td>{u.id}</td>
+                                <td>{u.Usuarios_id}</td>
+                                <td>{u.Usuarios_id_destinatario}</td>
+                                <td>{u.mensagem}</td>
+                                <td>
+                                    <button>Detalhes</button>
+                                    <button>Remover</button>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            {ListaMensagens.map((u) => (
-                                <tr key={u.id}>
-                                    <td>{u.id}</td>
-                                    <td>{u.Usuarios_id}</td>
-                                    <td>{u.Usuarios_id_destinatario}</td>
-                                    <td>{u.mensagem}</td>
-                                    <td>
-                                        <button>Detalhes</button>
-                                        <button>Remover</button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+            <div className='mt-5'>
+                <Footer />
+            </div>
         </>
     );
 };

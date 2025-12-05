@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-
+import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
 const Login = () => {
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
@@ -45,14 +46,16 @@ const Login = () => {
 
     return (
         <>
-            <h1>Entrar</h1>
-            <div>
+            <Navbar />
+            <div className='mt-5 w-50 m-auto border border-secondary rounded p-5'>
+                <h1 className='text-center'>Entrar</h1>
                 <form onSubmit={handleLogin}>
-                    <div>
-                        <input 
-                            type="email" 
-                            name="email" 
-                            id="email" 
+                    <div className='form-floating mb-3'>
+                        <input
+                            className='form-control'
+                            type="email"
+                            name="email"
+                            id="email"
                             placeholder='name@example.com'
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -60,11 +63,12 @@ const Login = () => {
                         />
                         <label htmlFor="email">Email</label>
                     </div>
-                    <div>
-                        <input 
-                            type="password" 
-                            name="senha" 
-                            id="senha" 
+                    <div className='form-floating mb-3'>
+                        <input
+                            className='form-control'
+                            type="password"
+                            name="senha"
+                            id="senha"
                             placeholder='Password'
                             value={senha}
                             onChange={(e) => setSenha(e.target.value)}
@@ -72,11 +76,14 @@ const Login = () => {
                         />
                         <label htmlFor="senha">Senha</label>
                     </div>
-                    <button type="submit">Entrar</button>
+                    <button type="submit" className='btn btn-primary w-100'>Entrar</button>
                 </form>
+                <div>
+                    <p>Novo por aqui? <Link to="/usuarios/register" className='text-primary'>Cadastrar aqui!</Link></p>
+                </div>
             </div>
-            <div>
-                <p>Novo por aqui? <Link to="/usuarios/register">Cadastrar aqui!</Link></p>
+            <div className='position-absolute bottom-0 start-0 end-0'>
+                <Footer />
             </div>
         </>
     )

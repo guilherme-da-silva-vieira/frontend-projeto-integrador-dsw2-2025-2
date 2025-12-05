@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import { useParams, useNavigate } from 'react-router-dom'
+import Expirar from '../../services/Expirar'
 
 const MensagensEdit = () => {
   const { id } = useParams(); // Pega o ID da URL
@@ -16,6 +17,12 @@ const MensagensEdit = () => {
 
   // Carregar dados da mensagem ao abrir a tela
   useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    const parsedUser = JSON.parse(storedUser);
+    if (!storedUser || parsedUser.papel != 1) {
+        navigate("/usuarios/login");
+        return;
+    }
     const fetchMensagem = async () => {
         try {
             const token = localStorage.getItem('token');
@@ -73,6 +80,7 @@ const MensagensEdit = () => {
 
   return (
     <>
+    <Expirar/>
       <Navbar />
       <div className='container mt-4'>
         {erro && <div className="alert alert-danger">{erro}</div>}

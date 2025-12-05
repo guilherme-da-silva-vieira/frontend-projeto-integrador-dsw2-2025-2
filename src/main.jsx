@@ -17,6 +17,7 @@ import Register from "./pages/usuarios/Register.jsx";
 import Profile from "./pages/usuarios/Profile.jsx";
 import DashboardAdmin from "./pages/dashboards/DashboardAdmin.jsx";
 import DashboardUser from "./pages/dashboards/DashboardUser.jsx";
+import Dashboard from "./pages/dashboards/Dashboard.jsx";
 
 const router = createBrowserRouter([
     { path: "/", element: <App /> },
@@ -31,6 +32,7 @@ const router = createBrowserRouter([
     { path: "/usuarios/profile", element: <Profile/>},
     { path: "/dashboard/admin", element: <DashboardAdmin/>},
     { path: "/dashboard/user", element: <DashboardUser/>},
+    { path: "/dashboard", element: <Dashboard/>},
 ]);
 
 createRoot(document.getElementById("root")).render(

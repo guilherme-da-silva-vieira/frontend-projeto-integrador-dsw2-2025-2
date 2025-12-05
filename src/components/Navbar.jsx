@@ -23,6 +23,9 @@ const Navbar = () => {
                             </li>
                             <DropdownUsuarios/>
                             <Dropdown/>
+                            <li className='navbar-nav me-auto mb-2 mb-lg-0'>
+                                <NavLink className="nav-link" to="/dashboard">Dashboard</NavLink>
+                            </li>
                         </ul>
                         <ThemeButton/>
                     </div>

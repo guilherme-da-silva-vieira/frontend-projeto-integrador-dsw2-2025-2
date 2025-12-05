@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Expirar from '../../services/Expirar';
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -101,6 +102,7 @@ const Profile = () => {
 
     return (
         <>
+        <Expirar/>
             <div>
                 <div>
                     <h1>Perfil de {user.nome}</h1>

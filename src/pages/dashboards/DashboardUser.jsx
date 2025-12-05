@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
 import { useNavigate, Link } from 'react-router-dom';
+import Expirar from '../../services/Expirar';
 
 const DashboardUser = () => {
     const navigate = useNavigate();
@@ -28,14 +31,17 @@ const DashboardUser = () => {
 
     return (
         <>
-            <div>
+            <Expirar />
+            <Navbar />
+            <div className='w-50 m-auto text-center border border-secondary rounded mt-5'>
                 <div>
                     <div>
                         <h1>Olá, {user.nome}!</h1>
                         <p>Bem-vindo ao seu painel de usuário.</p>
                         <div>
-                            <Link to="/mensagens">Ver Mensagens</Link>
-                            <Link to="/mensagens/create">Nova Mensagem</Link>
+                            <Link className='btn btn-primary' to="/mensagens">Ver Mensagens</Link>
+                            <br />
+                            <Link className="mt-2 btn btn-success"to="/mensagens/create">Nova Mensagem</Link>
                         </div>
                     </div>
                 </div>
@@ -45,17 +51,20 @@ const DashboardUser = () => {
                         <div>
                             <h2>Minha Conta</h2>
                             <p>Gerencie suas informações pessoais, email e senha de acesso.</p>
-                            <Link to="/usuarios/profile">Ir para Perfil</Link>
+                            <Link className='btn btn-primary' to="/usuarios/profile">Ir para Perfil</Link>
                         </div>
                     </div>
                     <div>
                         <div>
                             <h2>Suporte</h2>
                             <p>Precisa de ajuda? Entre em contato com a administração ou veja o sobre nós.</p>
-                            <Link to="/contato">Contato</Link>
+                            <Link className="btn btn-primary" to="/contato">Contato</Link>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div className="position-absolute bottom-0 start-0 end-0">
+                <Footer />
             </div>
         </>
     );
