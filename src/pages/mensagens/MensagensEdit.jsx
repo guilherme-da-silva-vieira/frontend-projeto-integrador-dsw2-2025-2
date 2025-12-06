@@ -19,7 +19,7 @@ const MensagensEdit = () => {
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     const parsedUser = JSON.parse(storedUser);
-    if (!storedUser || parsedUser.papel != 1) {
+    if (!storedUser) {
         navigate("/usuarios/login");
         return;
     }
