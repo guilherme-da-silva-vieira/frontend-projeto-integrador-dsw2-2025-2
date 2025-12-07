@@ -22,6 +22,7 @@ const Expirar = () => {
             if(estaExpirado(tokenArmazenado)){
                 localStorage.removeItem("token");
                 localStorage.removeItem("user");
+                alert("Sessão expirou, faça login novamente!")
                 navigate("/usuarios/login");
             }
         }

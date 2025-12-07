@@ -3,6 +3,8 @@ import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import { useNavigate } from 'react-router-dom';
 import Expirar from '../../services/Expirar';
+import { jwtDecode } from 'jwt-decode';
+import Ferramentas from '../../components/Ferramentas';
 
 const MensagensCreate = () => {
   // Inicializando estados
@@ -11,9 +13,8 @@ const MensagensCreate = () => {
   const [mensagem, setMensagem] = useState("");
   const [erro, setErro] = useState("");
   const storedUser = localStorage.getItem("user");
-  const parsedUser = JSON.parse(storedUser);
   const token = localStorage.getItem('token');
-
+  const parsedUser = JSON.parse(storedUser);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,7 +23,11 @@ const MensagensCreate = () => {
       navigate("/usuarios/login");
       return;
     }
-  },[storedUser,parsedUser,token]);
+    else {
+      const decode = jwtDecode(token);
+      setUsuarios_Id(decode.Usuarios_id);
+    }
+  }, [storedUser, parsedUser, token]);
   const enviaFormulario = async (e) => {
     e.preventDefault();
     setErro("");
@@ -58,27 +63,17 @@ const MensagensCreate = () => {
 
   return (
     <>
-    <Expirar/>
+      <Expirar />
       <Navbar />
-      <div className="container mt-4">
-        <form onSubmit={enviaFormulario}>
+      <div className="row m-2 g-4">
+        <div className='col-md-6 col-12'>
+          <Ferramentas/>
+        </div>
+        <form onSubmit={enviaFormulario} className='col-md-6 col-12'>
           <div className='card border-secondary p-4'>
             <h2 className='text-center mb-4'>Nova Mensagem</h2>
 
             {erro && <div className="alert alert-danger">{erro}</div>}
-
-            <div className="mb-3">
-              <label className='form-label' htmlFor="Usuarios_id">ID do Remetente (Você):</label>
-              <input
-                className='form-control'
-                type="number"
-                id="Usuarios_id"
-                value={Usuarios_id}
-                onChange={(e) => setUsuarios_Id(e.target.value)}
-                required
-                placeholder="Ex: 2"
-              />
-            </div>
 
             <div className="mb-3">
               <label className='form-label' htmlFor="Usuarios_id_destinatario">ID do Destinatário:</label>
@@ -111,7 +106,7 @@ const MensagensCreate = () => {
           </div>
         </form>
       </div>
-      <div className="mt-5 position-absolute bottom-0 start-0 end-0">
+      <div className="mt-5">
         <Footer />
       </div>
     </>
