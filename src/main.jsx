@@ -18,6 +18,9 @@ import Profile from "./pages/usuarios/Profile.jsx";
 import DashboardAdmin from "./pages/dashboards/DashboardAdmin.jsx";
 import DashboardUser from "./pages/dashboards/DashboardUser.jsx";
 import Dashboard from "./pages/dashboards/Dashboard.jsx";
+import Sobrescrever from "./pages/admin/Sobrescrever.jsx";
+import UsuariosShow from "./pages/usuarios/UsuariosShow.jsx";
+import UsuariosSobrescrever from "./pages/admin/UsuariosSobrescrever.jsx";
 
 const router = createBrowserRouter([
     { path: "/", element: <App /> },
@@ -33,6 +36,9 @@ const router = createBrowserRouter([
     { path: "/dashboard/admin", element: <DashboardAdmin/>},
     { path: "/dashboard/user", element: <DashboardUser/>},
     { path: "/dashboard", element: <Dashboard/>},
+    { path: "/admin/sobrescrever/:id", element: <Sobrescrever/>},
+    { path: "/usuarios/show/:id", element: <UsuariosShow/>},
+    { path: "/admin/usuarios/sobrescrever/:id", element: <UsuariosSobrescrever/>}
 ]);
 
 createRoot(document.getElementById("root")).render(

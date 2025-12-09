@@ -1,35 +1,47 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams, Link } from 'react-router-dom'
 import Expirar from '../../services/Expirar';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
+import { jwtDecode } from 'jwt-decode';
 
-const Profile = () => {
+const UsuariosSobrescrever = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [form, setForm] = useState({ nome: "", email: "", senha: "" });
+    const [token, setToken] = useState("");
+    const params = useParams();
+    const { id } = params;
 
     // Carrega dados do localStorage ao iniciar
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
-        if (!storedUser) {
+        const storedToken = localStorage.getItem("token");
+        if (!storedUser || !storedToken) {
             navigate("/usuarios/login");
             return;
         }
         const parsedUser = JSON.parse(storedUser);
         setUser(parsedUser);
-        setForm({ nome: parsedUser.nome, email: parsedUser.email, senha: "" });
-    }, [navigate]);
-
-    const handleLogout = async () => {
-        try {
-            await fetch("http://localhost:3000/api/usuarios/logout", { method: "POST" });
-        } catch (e) {
-            console.error("Erro ao fazer logout no backend", e);
+        setToken(storedToken);
+        const decode = jwtDecode(storedToken);
+        if(decode.papel != 0) {
+            alert("área restrita para administradores!");
+            navigate("/dashboard");
         }
-        localStorage.clear();
-        navigate("/usuarios/login");
-    };
+        const fetchUsuario = async () => {
+            try {
+                const response = await fetch(`http://localhost:3000/api/usuarios/${id}`);
+                const res = await response.json();
+                setForm({ nome: res.nome, email: res.email, senha: "" });
+            }
+            catch {
+                alert("Não foi possível obter usuário!");
+                navigate("/dashboard");
+            }
+        }
+        fetchUsuario();
+    }, [navigate, id]);
 
     const handleUpdate = async (e) => {
         e.preventDefault();
@@ -43,7 +55,7 @@ const Profile = () => {
         };
 
         try {
-            const response = await fetch(`http://localhost:3000/api/usuarios/${user.id}`, {
+            const response = await fetch(`http://localhost:3000/api/usuarios/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -59,48 +71,15 @@ const Profile = () => {
                 return;
             }
 
-            // Atualiza localStorage e estado
-            const newUser = { ...user, ...data };
-            localStorage.setItem("user", JSON.stringify(newUser));
-            setUser(newUser);
             setForm({ ...form, senha: "" }); // Limpa a senha por segurança
             alert("Perfil atualizado com sucesso!");
+            navigate("/dashboard");
 
         } catch (error) {
             console.error(error);
             alert("Erro de conexão.");
         }
     };
-
-    const handleDelete = async () => {
-        if (!window.confirm("Tem certeza que deseja excluir sua conta? Esta ação não pode ser desfeita.")) return;
-
-        const token = localStorage.getItem("token");
-        try {
-            const response = await fetch(`http://localhost:3000/api/usuarios/${user.id}`, {
-                method: "DELETE",
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
-            });
-
-            if (!response.ok) {
-                const data = await response.json();
-                alert(data.erro || "Erro ao excluir conta");
-                return;
-            }
-
-            alert("Conta excluída.");
-            localStorage.clear();
-            navigate("/");
-
-        } catch (error) {
-            console.error(error);
-            alert("Erro de conexão.");
-        }
-    };
-
-    if (!user) return <p>Carregando...</p>;
 
     return (
         <>
@@ -108,9 +87,9 @@ const Profile = () => {
             <Navbar />
             <div className='h-50 w-50 m-auto mt-5 border rounded'>
                 <div>
-                    <h1>Perfil de {user.nome}</h1>
-                    <p>Papel: {user.papel === 0 ? "Administrador" : "Usuário"}</p>
-                    <p>ID: {user.id}</p>
+                    <h1>Perfil de {form.nome}</h1>
+                    <p>Papel: {form.papel === 0 ? "Administrador" : "Usuário"}</p>
+                    <p>ID: {id}</p>
 
                     <hr />
 
@@ -143,16 +122,9 @@ const Profile = () => {
                             />
                         </div>
                         <button className='btn btn-success' type="submit"><i className='bi bi-pencil'></i> Salvar Alterações</button>
+                        <br />
+                        <Link className="btn btn-warning" to="/dashboard">Voltar</Link>
                     </form>
-
-                    <hr />
-                    <div className='mb-3'>
-                        <button className='btn btn-warning' onClick={handleLogout}><i className='bi bi-box-arrow-left'></i> Sair (Logout)</button>
-                    </div>
-                    <div>
-                        <h3>Danger Zone:</h3>
-                        <button className='btn btn-danger' onClick={handleDelete}><i className='bi bi-person-dash'></i> Excluir Conta</button>
-                    </div>
                 </div>
             </div>
             <div className='mt-5'>
@@ -162,4 +134,4 @@ const Profile = () => {
     )
 }
 
-export default Profile
+export default UsuariosSobrescrever

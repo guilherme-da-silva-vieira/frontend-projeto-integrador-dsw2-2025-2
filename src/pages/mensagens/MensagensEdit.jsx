@@ -14,8 +14,6 @@ const MensagensEdit = () => {
     const [mensagem, setMensagem] = useState("");
     const [erro, setErro] = useState(null);
 
-    const token = localStorage.getItem("");
-
     // Carregar dados da mensagem ao abrir a tela
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
@@ -54,9 +52,9 @@ const MensagensEdit = () => {
         const token = localStorage.getItem('token');
 
         const dadosAtualizados = {
-            Usuarios_id: Number(Usuarios_id),
+            // Usuarios_id: Number(Usuarios_id),
             Usuarios_id_destinatario: Number(Usuarios_id_destinatario),
-            mensagem
+            mensagem:mensagem
         };
 
         try {

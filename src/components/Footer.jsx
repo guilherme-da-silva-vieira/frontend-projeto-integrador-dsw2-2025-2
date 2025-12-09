@@ -12,7 +12,7 @@ const Footer = () => {
         <>
             <div className='text-center bg-info p-4'>
                 <footer>
-                    <p className='fs-1'>&copy; {year} Guilherme da Silva Vieira, todos os direitos reservados.</p>
+                    <p className='fs-1'>&copy; {year} PAPOTALK<sup>&reg;</sup>, todos os direitos reservados.</p>
                 </footer>
             </div>
         </>

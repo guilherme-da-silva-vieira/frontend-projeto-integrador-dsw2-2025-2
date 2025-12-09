@@ -50,7 +50,7 @@ const MensagensCreate = () => {
 
       if (!requisicao.ok) {
         const errorData = await requisicao.json();
-        throw new Error(errorData.erro || "Não foi possível salvar");
+        throw new Error("Não foi possível salvar, tente novamente");
       }
 
       alert("Mensagem enviada com sucesso!");

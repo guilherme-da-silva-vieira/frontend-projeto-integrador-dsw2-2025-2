@@ -68,13 +68,6 @@ const Register = () => {
             <input className='form-control' type="password" name="senha" id="senha" placeholder='senha' value={form.senha} onChange={e => setForm({ ...form, senha: e.target.value })} required />
             <label htmlFor="senha">Senha</label>
           </div>
-          <div className='form-floating'>
-            <select className='form-control mb-3' name="papel" id="papel" value={form.papel} onChange={e => setForm({ ...form, papel: e.target.value })} required>
-              <option value="1">Usuário</option>
-              <option value="0">Administrador</option>
-            </select>
-            <label htmlFor="papel">Selecionar Papel</label>
-          </div>
           <button type="submit" className='btn btn-primary w-100'>Cadastrar</button>
         </form>
         <div>
