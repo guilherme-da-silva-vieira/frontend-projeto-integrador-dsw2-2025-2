@@ -68,7 +68,7 @@ const ListaMensagem = () => {
                         </div>
                         <div className="card-body">
                             <h5 className="card-title">ID: {mensagem.id}</h5>
-                            <p className="card-text text-start p-2 bg-light rounded">{mensagem.mensagem}</p>
+                            <p className="card-text text-start p-2 rounded">{mensagem.mensagem}</p>
                             <div className="d-flex justify-content-center gap-2 mt-3">
                                 {
                                     user.id == mensagem.Usuarios_id 

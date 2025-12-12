@@ -88,7 +88,7 @@ const Sobrescrever = () => {
                         <div className='card border-secondary p-4'>
                             <p className='fs-2 text-center'>Editar Mensagem #{id}</p>
                             <div className="mb-3">
-                                <label className='form-label' htmlFor="usuarios">ID Destinatário:</label>
+                                <label className='form-label' htmlFor="usuarios">ID Usuário:</label>
                                 <input
                                     className='form-control'
                                     type="number"
